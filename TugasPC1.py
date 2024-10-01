@@ -1,24 +1,33 @@
 from PIL import Image
 import numpy as np
+import requests
+from io import BytesIO
 
-# cari dari file komputer
-image1 = Image.open(r"C:\Users\Kiraitsu\Downloads\__sparkle_and_sparkle_honkai_and_1_more_drawn_by_butyou_mika1412__8bfffa81080e79dc8d66cae48d6e92b7.jpg")
-image2 = Image.open(r"C:\Users\Kiraitsu\Downloads\__sparkle_honkai_and_1_more_drawn_by_torriet__ea8665acacab05a9349fc2d5d8934705.jpg")
+# download image1 from URL
+url1 = "https://images6.alphacoders.com/135/thumb-1920-1353817.jpg"
+response1 = requests.get(url1)
+image1 = Image.open(BytesIO(response1.content))
 
-# untuk mengubah ukuran gambar dua agar sesuai dengan gambar satu
+# download image2 from URL
+url2 = "https://images3.alphacoders.com/135/1353818.jpg"
+response2 = requests.get(url2)
+image2 = Image.open(BytesIO(response2.content))
+
+# to resize image2 to match image1's size
 image2 = image2.resize(image1.size)
 
-# mengubah gambar menjadi array numpy
+# convert images to numpy arrays
 image1_np = np.array(image1)
 image2_np = np.array(image2)
 
+# perform the operation
 result = (image1_np + image2_np) * (image1_np - image2_np)
 
-# mengubah kembali hasil operasi menjadi gambar
+# convert the result back to an image
 result_image = Image.fromarray(np.uint8(result))
 
-# menyimpan hasil gambar
+# save the resulting image
 result_image.save('hasil_operasi.png')
 
-# menampilkan hasil gambar
+# show the result image
 result_image.show()
